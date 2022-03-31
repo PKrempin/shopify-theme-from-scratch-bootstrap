@@ -1,0 +1,52 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <!-- STORE NAME / LOGO -->
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">{{ shop.name }}</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
+    <!-- NAVIGATION MENU -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          {% for link in section.settings.menu.links %}
+            {% if link.links != blank %}
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                {{link.title}}
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                {% for dropdownLink in link.links %}
+                  <li><a class="dropdown-item" href="{{ dropdownLink.url }}">{{ dropdownLink.title }}</a></li>
+                {% endfor %}    
+              </ul>
+            </li>
+            {% else %}
+            <li class="nav-item"></li>
+              <a class="nav-link active" aria-current="page" href="{{link.url}}">{{link.title}}</a>
+            </li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+        <!-- CART BUTTON / ACCOUNTS IF ENABLED -->
+      <div>
+        <a class="nav-link active alt-link" aria-current="page" href="/cart"><i class="fa-solid fa-cart-shopping faLink"></i></a>
+        {% if shop.customer_accounts_enabled %}
+        
+        {% endif %}  
+      </div>
+  </nav>
+
+ {% schema %}
+ {
+   "name": "Header",
+   "settings":[
+   {
+     "type": "link_list",
+     "id": "menu",
+     "label": "Heading Navigation Menu",
+     "default": "main-menu"
+   }
+   ]
+ }
+ {% endschema %}
