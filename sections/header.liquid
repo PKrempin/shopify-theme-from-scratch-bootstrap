@@ -1,4 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  
     <!-- STORE NAME / LOGO -->
     <div class="container-fluid">
       <a class="navbar-brand" href="#">{{ shop.name }}</a>
@@ -9,6 +10,7 @@
     <!-- NAVIGATION MENU -->
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
           {% for link in section.settings.menu.links %}
             {% if link.links != blank %}
             <li class="nav-item dropdown">
@@ -27,14 +29,31 @@
             </li>
             {% endif %}
           {% endfor %}
-        </ul>
-        <!-- CART BUTTON / ACCOUNTS IF ENABLED -->
-      <div>
-        <a class="nav-link active alt-link" aria-current="page" href="/cart"><i class="fa-solid fa-cart-shopping faLink"></i></a>
-        {% if shop.customer_accounts_enabled %}
-        
-        {% endif %}  
-      </div>
+
+            <!-- CART BUTTON / ACCOUNTS IF ENABLED -->
+            <!-- Consider adding cart item counter next to the shopping cart logo and or dropdown menu showing products in cart. AJAX... -->
+            <li>
+              <a class="nav-link active alt-link noWrap" aria-current="page" href="/cart">Cart<i class="fa-solid fa-cart-shopping faLink"></i></a>
+            </li>
+            {% if shop.customer_accounts_enabled %}
+            {% if customer %}
+            <li>
+               <a class="nav-link active" aria-current="page" href="/account">{{customer.name}}</a>
+               {{ 'Log out'  | customer_logout_link | replace: '<a', '<a class="nav-link active noWrap"' }}
+            </li>
+            {% else %}
+            <li>
+              {{ 'Log in' | customer_login_link | replace: '<a', '<a class="nav-link active noWrap"' }}
+            </li>
+            <li>
+              {{ 'Register' | customer_register_link | replace: '<a', '<a class="nav-link active noWrap"' }}
+            </li>
+            {% endif %}
+            {% endif %}
+        </ul>    
+    </div>
+    
+    
   </nav>
 
  {% schema %}
