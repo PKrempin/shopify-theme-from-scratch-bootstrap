@@ -1,0 +1,30 @@
+<div class="container " style="text-align:center;  border-radius: 20px; height: 90vh; margin: auto; display: flex; justify-content: center; align-items: center; flex-direction: column;">
+    <h1>{{ section.settings.title}}</h1>
+    <p>{{ section.settings.subtext}}</p>
+    <a class="btn btn-outline-primary" href="/" role="button">{{section.settings.button-text}}</a>
+</div>
+{% schema %}
+{
+    "name": "Template-404",
+    "settings": [
+        {
+            "type": "text",
+            "id": "title",
+            "default": "404",
+            "label": "404 Heading Title"
+        },
+        {
+            "type": "text",
+            "id": "subtext",
+            "default": "Page could not be found",
+            "label": "404 Subtext"
+        },
+        {
+            "type": "text",
+            "id": "button-text",
+            "default": "Home",
+            "label": "Button text"
+        }
+    ]
+}
+{% endschema %}

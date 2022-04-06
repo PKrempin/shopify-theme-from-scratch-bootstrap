@@ -1,0 +1,10 @@
+{
+    "name": "Template-404",
+    "wrapper": "div.custom-class",
+    "sections": {
+        "template": {
+            "type": "template-404"
+        }
+    },
+    "order": ["template"]
+}
