@@ -1,0 +1,31 @@
+{
+    "name": "Template-Article",
+    "wrapper": "div.custom-class",
+    "sections": {
+        "article": {
+            "type": "template-article",
+            "blocks": {
+                "title": {
+                    "type": "article_title"
+                },
+                "author": {
+                    "type": "article_author"
+                },
+                "image": {
+                    "type": "article_image"
+                },
+                "date": {
+                    "type": "published_date"
+                },
+                "content":{
+                    "type": "article_content"
+                }
+            },
+            "block_order":["title", "author", "image", "date", "content"]
+        },
+        "example" : {
+            "type" : "example"
+        }
+    },
+    "order": ["article", "example"]
+}

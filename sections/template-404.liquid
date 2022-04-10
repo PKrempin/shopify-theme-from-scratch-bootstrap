@@ -1,7 +1,9 @@
-<div class="container " style="text-align:center;  border-radius: 20px; height: 90vh; margin: auto; display: flex; justify-content: center; align-items: center; flex-direction: column;">
+<div class="container " style="text-align:center;  border-radius: 20px; height: 60vh; margin: auto; display: flex; justify-content: center; align-items: center; flex-direction: column;">
     <h1>{{ section.settings.title}}</h1>
     <p>{{ section.settings.subtext}}</p>
-    <a class="btn btn-outline-primary" href="/" role="button">{{section.settings.button-text}}</a>
+    {% if section.settings.show-button == true %}
+        <a class="btn btn-outline-primary" href="{{section.settings.button-url}}" role="button">{{section.settings.button-text}}</a>  
+    {% endif %}
 </div>
 {% schema %}
 {
@@ -24,6 +26,19 @@
             "id": "button-text",
             "default": "Home",
             "label": "Button text"
+        },
+        {
+            "type": "text",
+            "id": "button-url",
+            "default": "{{shop.url}}",
+            "label": "Button URL",
+            "info": "{{shop.url}} is your stores homepage"
+        },
+        {
+            "type": "checkbox",
+            "id": "show-button",
+            "label": "Button link?",
+            "default": true
         }
     ]
 }
