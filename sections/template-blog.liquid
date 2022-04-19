@@ -1,0 +1,120 @@
+<!--
+1. Make two more mock blogs
+2. Set up the blog.json template to pull the template-blog section
+3. Present all articles on blog page with clickable links
+4. Figure out what kind of schema we need for the Blog page and impliment it.
+5. Refine the Blog design w/ pagination
+6. Figure out spacing issues with cards. Need margin without flexing the card to the next row simply
+from spacing.
+-->
+
+
+{% if blog.articles_count == 0 %}
+
+<div class="container " style="text-align:center;  border-radius: 20px; height: 60vh; margin: auto; display: flex; justify-content: center; align-items: center; flex-direction: column;">
+    <h1>Sorry, there are no articles</h1>
+    <a class="btn btn-outline-primary" href="{{section.settings.button-url}}" role="button">{{section.settings.button-text}}</a>  
+</div> 
+
+{% else %}
+ 
+{% paginate blog.articles by 3 %}
+    
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 " style="--bs-gutter-x: 0;">
+{% for article in blog.articles %}
+
+<div class="card" style="padding: 0;">
+    <div class="col">
+    <img src="{{ article.image.src | image_url: width: 500 }}" class="card-img-top" alt="...">
+    <div class="card-body">
+        <h5 class="card-title">{{article.title}}</h5>
+        <p class="card-text">{{article.excerpt}}</p>
+        <small>{{ article.published_at | date: "%a, %b %d, %y" }}</small>
+        <br>
+        <a href="{{article.url}}" class="btn btn-primary">Go somewhere</a>
+    </div>
+    </div>
+    </div>
+{% endfor %}
+</div>
+{% if paginate.next.is_link %}
+  {% for part in paginate.parts %}
+    {% if part.is_link %}
+        {{ part.title | link_to: part.url}}
+      {% endif %}
+    {% endfor %}
+    <a href="{{ paginate.next.url }}">{{ paginate.next.title }}</a>
+  {% endif %}
+
+  {% if paginate.previous.is_link %}
+    <a href="{{ paginate.previous.url }}">{{ paginate.previous.title }}</a>
+    {% for part in paginate.parts %}
+    {% if part.is_link %}
+        {{ part.title | link_to: part.url}}
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+{% endpaginate %}
+{% endif %}
+
+{%- comment -%}
+<div class="card m-3" style="width: 18rem;">
+    <img src="{{ article.image.src | image_url: width: 500 }}" class="card-img-top" alt="...">
+    <div class="card-body">
+        <h5 class="card-title">{{article.title}}</h5>
+        <p class="card-text">{{article.excerpt}}</p>
+        <small>{{ article.published_at | date: "%a, %b %d, %y" }}</small>
+        <a href="{{article.url}}" class="btn btn-primary">Go somewhere</a>
+    </div>
+    </div>
+{%- endcomment -%}
+
+
+
+{% schema %}
+{
+    "name": "Blog-Section",
+    "settings": [
+        {
+            "type": "checkbox",
+            "id": "article_author",
+            "label": "Show author name",
+            "default": true
+        },
+        {
+            "type": "checkbox",
+            "id": "article_excerpt",
+            "label": "Show article excerpt",
+            "default": true
+        },
+        {
+            "type": "checkbox",
+            "id": "article_publish_date",
+            "label": "Show publish date",
+            "default": true
+        }
+    ],
+    "blocks": [
+        {
+            "name": "Article Heading",
+            "type": "article-heading",
+            "limit": 1
+        },
+        {
+            "name": "Article Excerpt",
+            "type": "article-excerpt",
+            "limit": 1
+        },
+        {
+            "name": "Article Publish Date",
+            "type": "article-publish-date",
+            "limit": 1
+        },
+        {
+            "name": "Article Link",
+            "type": "article-link",
+            "limit": 1
+        }
+    ]
+}
+{% endschema %}

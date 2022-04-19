@@ -1,0 +1,12 @@
+{
+    "name": "Blog Template",
+    "wrapper": "div.example-class",
+    "sections": {
+        "blog":{
+            "type": "template-blog"
+        }
+    },
+    "order":[
+        "blog"
+    ] 
+}
