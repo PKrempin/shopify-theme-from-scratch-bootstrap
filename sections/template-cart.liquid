@@ -1,3 +1,9 @@
+This is the cart page!!!!!!
+
+{%- comment -%}
+
+This is the default cart template
+
 {% if cart.item_count > 0 %}
   <h1>cart</h1>
   <form action="/cart" method="post" novalidate>
@@ -44,3 +50,4 @@
   <h2>cart</h2>
   Cart is empty
 {% endif %}
+{%- endcomment -%}

@@ -6,6 +6,9 @@
 5. Refine the Blog design w/ pagination
 6. Figure out spacing issues with cards. Need margin without flexing the card to the next row simply
 from spacing.
+7. Test Schema Settings in customizer
+8. Add blocks to json template
+9. Set up pagination as reusable snippet (with pagiante count based on schema settings)
 -->
 
 
@@ -17,26 +20,60 @@ from spacing.
 </div> 
 
 {% else %}
+
+{% capture number_of_articles %}{{ section.settings.articles_rendered }}{% endcapture %}
  
-{% paginate blog.articles by 3 %}
+{% paginate blog.articles by number_of_articles %}
     
-<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 " style="--bs-gutter-x: 0;">
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3" >
 {% for article in blog.articles %}
 
-<div class="card" style="padding: 0;">
-    <div class="col">
-    <img src="{{ article.image.src | image_url: width: 500 }}" class="card-img-top" alt="...">
+<div class="col mb-3">
+<div class="card h-100" style="padding: 0;">
+    
+        {% if article.image %}
+                <img src="{{ article.image.src | image_url: width: 500 }}" class="card-img-top" alt="{{article.image.alt}}">
+            {% else %}
+                <div style="text-align: center; max-height: 286px;">
+                    {{'image' | placeholder_svg_tag: 'card-img-top h-100'}}
+                </div>
+        {% endif %}
+        
     <div class="card-body">
-        <h5 class="card-title">{{article.title}}</h5>
-        <p class="card-text">{{article.excerpt}}</p>
-        <small>{{ article.published_at | date: "%a, %b %d, %y" }}</small>
-        <br>
-        <a href="{{article.url}}" class="btn btn-primary">Go somewhere</a>
+        {% for block in section.blocks %}
+            {% case block.type %}
+                {% when 'article-heading' %}
+                <h5 class="card-title">{{article.title}}</h5>
+                {% when 'article-author' %}
+                    {% if section.settings.article_author %}
+                    <small>{{ article.author }}</small> 
+                    <br>
+                    {% endif %}
+                {% when 'article-excerpt' %}
+                    {% if section.settings.article_excerpt %}
+                    <p class="card-text">{{article.excerpt}}</p>
+                    <br>
+                    {% endif %}
+                {% when 'article-publish-date' %}
+                    {% if section.settings.article_publish_date %}
+                    <small>{{ article.published_at | date: "%a, %b %d, %y" }}</small>
+                    <br>
+                    {% endif %}
+                {% when 'article-summary' %}
+                    <p>{{ article.content | truncate: 100, "..." }}</p>
+                    <br>
+            {% endcase %}
+        {% endfor %}
     </div>
+    <div class="card-footer" style="text-align: center;">
+        <a href="{{article.url}}" class="btn btn-primary">Read this article</a>
+      </div>
     </div>
     </div>
 {% endfor %}
 </div>
+
+{%- comment -%}
 {% if paginate.next.is_link %}
   {% for part in paginate.parts %}
     {% if part.is_link %}
@@ -54,22 +91,14 @@ from spacing.
       {% endif %}
     {% endfor %}
   {% endif %}
-{% endpaginate %}
-{% endif %}
-
-{%- comment -%}
-<div class="card m-3" style="width: 18rem;">
-    <img src="{{ article.image.src | image_url: width: 500 }}" class="card-img-top" alt="...">
-    <div class="card-body">
-        <h5 class="card-title">{{article.title}}</h5>
-        <p class="card-text">{{article.excerpt}}</p>
-        <small>{{ article.published_at | date: "%a, %b %d, %y" }}</small>
-        <a href="{{article.url}}" class="btn btn-primary">Go somewhere</a>
-    </div>
-    </div>
 {%- endcomment -%}
 
+<div class="d-flex justify-content-center m-2">
+    {% render "pagination", pagination: paginate %}
+</div>
 
+{% endpaginate %}
+{% endif %}
 
 {% schema %}
 {
@@ -92,7 +121,16 @@ from spacing.
             "id": "article_publish_date",
             "label": "Show publish date",
             "default": true
-        }
+        },
+        {
+            "type": "range",
+            "id": "articles_rendered",
+            "min": 3,
+            "max": 6,
+            "step": 1,
+            "label": "Number of Articles Per Page",
+            "default": 3
+          }
     ],
     "blocks": [
         {
@@ -111,8 +149,13 @@ from spacing.
             "limit": 1
         },
         {
-            "name": "Article Link",
-            "type": "article-link",
+            "name": "Article Summary",
+            "type": "article-summary",
+            "limit": 1
+        },
+        {
+            "name": "Author Name",
+            "type": "article-author",
             "limit": 1
         }
     ]

@@ -34,6 +34,7 @@
 {% if blog.comments_enabled? %}
   <div id="comments-section">
   {% if article.comments_count > 0 %}
+
   {% paginate article.comments by 5 %}
   {% for comment in article.comments %}
       <div class="card">
@@ -46,23 +47,27 @@
       </div>
   {% endfor %}
 
-  {% if paginate.next.is_link %}
-  {% for part in paginate.parts %}
-    {% if part.is_link %}
-        {{ part.title | link_to: part.url}}
-      {% endif %}
-    {% endfor %}
-    <a href="{{ paginate.next.url }}#comments-section">{{ paginate.next.title }}</a>
-  {% endif %}
+  {%- comment -%}
+  I chose to use a custom pagination section instead of the snippet so that I can add the 
+  '#comments-section' jump link to the paginate urls
+  {%- endcomment -%}
 
+  <div class="d-flex justify-content-center m-2 comments-pagination">   
   {% if paginate.previous.is_link %}
     <a href="{{ paginate.previous.url }}#comments-section">{{ paginate.previous.title }}</a>
-    {% for part in paginate.parts %}
-    {% if part.is_link %}
-        {{ part.title | link_to: part.url}}
-      {% endif %}
-    {% endfor %}
   {% endif %}
+
+  {% for part in paginate.parts %}
+  {% if part.is_link %}
+      {{ part.title | link_to: part.url}}
+    {% endif %}
+  {% endfor %}
+
+  {% if paginate.next.is_link %}
+    <a href="{{ paginate.next.url }}#comments-section">{{ paginate.next.title }}</a>
+  {% endif %}
+  </div>
+  
 
   {% endpaginate %}
       

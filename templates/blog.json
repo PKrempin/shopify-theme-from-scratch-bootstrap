@@ -3,7 +3,25 @@
     "wrapper": "div.example-class",
     "sections": {
         "blog":{
-            "type": "template-blog"
+            "type": "template-blog",
+            "blocks": {
+                "heading": {
+                    "type": "article-heading"
+                },
+                "author": {
+                    "type": "article-author"
+                },
+                "date": {
+                    "type": "article-publish-date"
+                },
+                "summary":{
+                    "type": "article-summary"
+                },
+                "excerpt": {
+                    "type": "article-excerpt"
+                }
+            },
+            "block_order":["heading", "excerpt", "date", "author", "summary"]
         }
     },
     "order":[

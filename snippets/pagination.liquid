@@ -1,0 +1,32 @@
+
+{%- comment -%}
+Instructions for using snippets:
+    You must pass through a parameter with the snippet render that carries the object you want 
+    to utilize within the snippet.
+
+    Ex.  {% render 'pagination', pagination: paginate %}
+    Here we are rendering the 'pagination' snippet w/ a parameter named 'pagination' that is 
+    holding the paginate shopify object. 
+
+    Notice below how we are using the 'pagination' parameter to reference the paginate object.
+
+    *See 'template-blog.liquid' for more context
+{%- endcomment -%}
+
+{% if pagination.pages > 0 %}
+    <nav roll="navigation">
+        {% if pagination.previous.is_link %}
+            <a href="{{ pagination.previous.url }}">{{ pagination.previous.title }}</a>
+        {% endif %}
+
+        {% for part in paginate.parts %}
+            {% if part.is_link %}
+                {{ part.title | link_to: part.url}}
+            {% endif %}
+        {% endfor %}
+
+        {% if pagination.next.is_link %}
+            <a href="{{ pagination.next.url }}">{{ pagination.next.title }}</a>
+        {% endif %}
+    </nav>
+{% endif %}
