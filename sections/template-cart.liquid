@@ -1,4 +1,177 @@
-This is the cart page!!!!!!
+<!--
+  Creating the cart page:
+    1. Cart heading and a "continue shopping" link
+    2. Create a form that posts to the cart url and contains a table displaying:
+      a. Product Image
+        - Conditional that displays svg placeholder if there is no product image.
+        - Product title w/ link and remove button w/link
+      b. Quantity (with increase and decrease buttons)
+        - Input type of number with name of "updates[]" and an id of 
+        "updates_ index within the for loop  and value of item.quantitiy"
+      c. Total price of product
+        - The total price of the items multiples (remmeber the money filter)
+    3. Cart footer containing an update and checkout button
+      a. Display total price of cart
+      b. button that submits the form with name of "update"
+      c. submit button named checkout
+
+  Once all of the functionality is in place, push impliment auto unpdate functionality to 
+  the item quantities and the prices. Shopifys API?
+-->
+
+<script>
+  // Playing around with the shopify api. 
+  // Would like to impliment a cart auto update feature on quantity changes later. 
+    fetch(window.Shopify.routes.root + 'cart.js', {
+    method: 'GET',
+  })
+  .then(response => {
+    return console.log(response.json());
+  })
+  .catch((error) => {
+    console.error('Error:', error);
+  });
+</script>
+
+{% if cart.item_count == 0 %}
+  <div class="container " style="text-align:center;  border-radius: 20px; height: 60vh; margin: auto; display: flex; justify-content: center; align-items: center; flex-direction: column;">
+    <h1>{{ section.settings.title}}</h1>
+    {% if section.settings.show-button == true %}
+        <a class="btn btn-outline-primary" href="{{section.settings.button_link}}" role="button">{{section.settings.button-text}}</a>  
+    {% endif %}
+  </div>
+
+  {% else %}
+    
+  <div class="d-flex justify-content-between">
+    <h2>Your Cart</h2>
+    <a href="{{ routes.all_products_collection_url }}">Countinue Shopping</a>
+  </div>
+
+  <div>
+    <form action="{{ routes.cart_url }}" method="POST" novalidate>
+      <table class="table table-striped">
+        <thead>
+          <th>Product</th>
+          <th>Quantity</th>
+          <th>Price</th>
+        </thead>
+        <tbody>
+          {% for item in cart.items %}
+          <tr>
+            <td>
+              <div class="d-flex">
+                
+                  <a href="{{ item.url}}" style="width:50%;">
+                    {% if item.image %}
+                      <img src="{{ item | img_url: 'small' }}" alt="{{ item.title | escape }}" class="img-thumbnail">
+                    {% else %}
+                      {{ 'product-1' | placeholder_svg_tag: 'img-thumbnail' }}
+                  {% endif %}
+                  </a> 
+                <div class="ms-2">
+                  <p>{{ item.title }}</p>
+                  <p>{{ item.original_price | money}}</p>
+                </div>
+              </div>
+              
+            </td>
+            <td>
+              <div class="input-group mb-3 w-50">
+                <input type="number" class="form-control" name="updates[]" id="updates_{{ forloop.index }}" value="{{ item.quantity }}" min="0">
+                <a class="ms-2" href="/cart/change?id={{item.variant_id}}&quantity=0">Remove</a>
+              </div>
+            </td>
+            <td>{{item.final_price | times: item.quantity | money}}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <div class="d-flex justify-content-end">
+        <div id="cart-footer" class="d-flex flex-column" style="width: 30%;">
+          <div id="cart-total-price"> Cart Total: {{ cart.total_price | money}}</div>
+          <button type="submit" name="update">Update</button>
+          <button type="submit" name="checkout">Checkout</button>
+        </div>  
+      </div>
+
+      
+      <label for="cart_notes my-1">Cart notes</label>
+      <textarea name="note" id="cart_note" class="w-full md:max-w-lg resize-none border h-20"></textarea>
+
+    </form>
+  </div>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Template-Cart",
+  "settings": [
+      {
+          "type": "text",
+          "id": "title",
+          "default": "No Items in Cart",
+          "label": "No Items Message"
+      },
+      {
+          "type": "text",
+          "id": "button-text",
+          "default": "Let's go shopping!",
+          "label": "Button text"
+      },
+      {
+        "type": "url",
+        "id": "button_link",
+        "label": "Button link"
+      },
+      {
+          "type": "checkbox",
+          "id": "show-button",
+          "label": "Button link?",
+          "default": true
+      }
+  ]
+}
+{% endschema %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 {%- comment -%}
 

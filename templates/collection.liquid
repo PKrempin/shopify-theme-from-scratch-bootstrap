@@ -1,5 +1,6 @@
-{% paginate collection.products by 2 %}
+{% paginate collection.products by 6 %}
   <h1>{{ collection.title }}</h1>
+  <h3>TESTING</h3>
   {% for product in collection.products %}
     <div>
       <a href="{{ product.url | within: collection }}">{{ product.title }}</a>
@@ -16,3 +17,6 @@
     {{ paginate | default_pagination }}
   {% endif %}
 {% endpaginate %}
+
+<script>console.log({{ collection.products | json }});</script>
+
