@@ -1,0 +1,66 @@
+<div class="card m-auto h-100 product_card_container" id="{{product_product.id}}" >
+
+  
+    <a class="h-100 product_card_link" href="{{ product_product.url | within: collection }}" >
+        <img src="{{ product_product.featured_image.src | img_url: 'large' }}" class="card-img-top" alt="{{ product_product.featured_image.alt | escape }}">
+        <div class="card-body">
+          <h5 class="card-title">{{product_product.title | truncate: 50}}</h5>
+          {% unless product_product.available %}<br><strong>sold out</strong>{% endunless %}
+          <h5 class="card-title">{{product_product.price | money}}</h5>
+        </div>
+    </a>
+    <button type="button" id="product-btn-{{product_product.id}}" class="btn btn-success">Add to Cart</button>
+  
+  <div id="collection-add-to-cart-form-{{product_product.id}}" class="collection-add-to-cart-form">
+    <form action="/cart/add" method="post" enctype="multipart/form-data" class="AddToCartForm">
+      <div class="collection-form-selectors">
+        <div>
+          <label for="variantSelector">product:</label>
+
+        <select name="variantSelector" id="productSelect-{{product_product.id}}">
+          {% for variant in product_product.variants %}
+            {% if variant.available %}
+              <option class="variant-option" value="{{ variant.id }}">
+                {{ variant.title }} - {{ variant.price | money_with_currency }}
+              </option>
+            {% else %}
+              <option disabled="disabled">
+                {{ variant.title }} - sold out
+              </option>
+            {% endif %}
+          {% endfor %}
+        </select>
+        </div>
+        {{ current_variant.price | money }}
+        <div>
+        
+        <label for="Quantity">quantity:</label>
+        
+        <input type="number" id="{{product_product.id}}-quantity" name="quantity" value="1" min="1">
+        </div>
+      </div>
+      <br>
+      <button type="button" name="add" id="add-to-cart-{{product_product.id}}" class="add-to-cart-form-btn btn btn-success">Add to cart</button>
+      <button type="button" class="collection-update-cart-button btn btn-success" id="update-cart-{{product_product.id}}">Update Cart</button>
+
+    </form>
+  </div>
+</div>
+
+
+{%- comment -%}
+{% for product_option in product_product.options_with_values %}
+  <label>
+    {{ product_option.name }}
+    <select>
+      {% for value in product_option.values %}
+        <option {% if product_option.selected_value == value %}selected{% endif %}>
+          {{ value }}
+        </option>
+      {% endfor %}
+    </select>
+  </label>
+{% endfor %}
+
+{%- endcomment -%}
+

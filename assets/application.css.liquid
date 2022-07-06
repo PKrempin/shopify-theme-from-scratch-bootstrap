@@ -11,13 +11,7 @@
 }
 
 .parallax {
-    /* The image used */
-    /* background-image: url("img_parallax.jpg");*/
-  
-    /* Set a specific height */
     min-height: 500px;
-  
-    /* Create the parallax scrolling effect */
     background-attachment: fixed;
     background-position: center;
     background-repeat: no-repeat;
@@ -35,58 +29,55 @@
     padding: 0px 5px;
   }
 
-  .item-input-wrapper{
-    display: flex;
-    justify-content: start;
+  #alert-target {
+	position: fixed;
+	top:5%;
+	right: 50%;
+	transform: translate(50%);
+	z-index: 9999;
   }
 
+/*
+==============================================
+fadeInOut
+==============================================
+*/
 
-  .qty-wrapper{
-      border: 1px solid black;
-      display: flex;
-      justify-content: space-between;
-      font-size: 1.4em;
-  }
+.fadeInOut{
+	animation-name: fadeInOut;
+	-webkit-animation-name: fadeInOut;	
 
+	animation-duration: 3s;	
+	-webkit-animation-duration: 3s;
 
-  .qty-wrapper button {
-    background: none;
-	color: inherit;
-	border: none;
-	font: inherit;
-	outline: inherit;
-    padding: 0px 10px 0px 10px;
-  }
+	animation-timing-function: ease-in-out;	
+	-webkit-animation-timing-function: ease-in-out;	
+    
+    animation-fill-mode: forwards;
 
-  .qty-wrapper button:hover {
-    background: gray;
-    transition: 0.5s;
-  }
-
-  .qty-wrapper p {
-      margin: 0px 10px 0px 10px;
-  }
-
-  .item-input-wrapper a {
-    font-size:1.5rem;
-    text-decoration: none;
-    margin-left: 10px;
-    color: inherit;
 }
 
-.cart-total{
-    font-size: 1.5em;
-    font-weight: 100;
+@keyframes fadeInOut {
+	0% {
+		transform: scale(0);
+		opacity: 0.0;		
+	}
+    25%{
+        transform: scale(1.1);
+		opacity: 1;	  
+    }
+	50% {
+        transform: scale(1);
+		opacity: 1;	
+    }
+    75% {
+        transform: scale(1.1);
+		opacity: 1;	
+    }
+	100% {
+		transform: scale(0);
+		opacity: 0;	
+	}		
 }
 
-.cart-notes{
-    padding-right: 10px;
-    width: 60%;
-}
 
-.update-form-btn{
-    margin-bottom: 5px;
-}
-
-
-  

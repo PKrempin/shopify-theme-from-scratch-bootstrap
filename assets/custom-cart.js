@@ -1,107 +1,4 @@
 /*
-function plusOne(theId){
-    let item = document.getElementById(`theitem-${theId}`)
-    let itemId = theId.toString()
-    let itemAdd = parseInt(item.innerHTML) +  1
-    let itemQuantity = itemAdd.toString()
-
-    let itemData = {
-        'id': itemId,
-        'quantity': itemQuantity
-    }
-
-
-    console.log(itemData)
-
-    fetch(window.Shopify.routes.root + 'cart/change.js', {
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/json",
-            "Accept": "application/json"
-        },
-        body: JSON.stringify(itemData)
-      })
-      .then(response => {
-        item.innerHTML = itemQuantity
-        return console.log(response.json());
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-      });        
-}
-*/
-
-/*
-function plusOne(theId){
-
-  
-  
-
-  let item = document.getElementById(`theitem-${theId}`)
-  let itemId = theId.toString()
-  let itemAdd = parseInt(item.innerHTML) +  1
-  let itemQuantity = itemAdd.toString()
-
-  let itemData = {
-      'id': itemId,
-      'quantity': itemQuantity
-  }
-
-  fetch(window.Shopify.routes.root + 'cart/change.js', {
-      method: 'POST',
-      headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json"
-      },
-      body: JSON.stringify(itemData)
-    })
-    .then(response => {
-      item.innerHTML = itemQuantity
-      return console.log(response.json());
-    })
-    .catch((error) => {
-      console.error('Error:', error);
-    });        
-}
-
-
-
-function minusOne(theId){
-  let item = document.getElementById(`theitem-${theId}`)
-  let itemId = theId.toString()
-  let itemMinus = parseInt(item.innerHTML) -  1
-  let itemQuantity = itemMinus.toString()
-
-  let itemData = {
-      'id': itemId,
-      'quantity': itemQuantity
-  }
-
-  console.log(item.parentNode.parentNode.parentNode.parentNode)
-
-    fetch(window.Shopify.routes.root + 'cart/change.js', {
-      method: 'POST',
-      headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json"
-      },
-      body: JSON.stringify(itemData)
-    })
-    .then(response => {
-      if(itemMinus == 0){
-        window.location.href = `/cart/change?id=${theId}&quantity=0`;
-      } else {
-        item.innerHTML = itemQuantity
-        return console.log(response.json());
-      }
-    })
-    .catch((error) => {
-      console.error('Error:', error);
-    });
-  }
-*/
-
-/*
 1. Pull cart data for use within this javascript file
 
 2. Create a callback function that updates the javascript cart data when a product 
@@ -144,45 +41,43 @@ async function getCartData(){
 async function changeQty(variantId, operation){
   let item = cartData.items.find(obj => obj.variant_id == variantId)
   let qtyChange = operation == "plus" ? item.quantity + 1 : item.quantity - 1
-
-  await fetchCartChange(variantId, qtyChange)
+  let itemTotalPrice = document.getElementById(`item-total-price-${variantId}`)
+  let totalPrice = document.getElementById('cart-total-price')
+  let bottomBorder = document.getElementById('bottom-border')
+  bottomBorder.classList = ''
+  bottomBorder.classList.add('borderClose')
+  totalPrice.classList = ''
+  totalPrice.classList.add("shrinkNumber")
+  itemTotalPrice.innerHTML = ''
+  await fetchCartChange(variantId, qtyChange, itemTotalPrice)
 
   let data = cartData
   let upDatedItem = cartData.items.find(obj => obj.variant_id == variantId)
 
   if(qtyChange == 0){
     removeTableRow(variantId)
+    updateTotalPrice(data.total_price, totalPrice)  
     if(data.item_count == 0) {
       location.reload() 
     }
     } else {
       console.log('in changeQty function', data)
       updateItemQuantity(variantId, qtyChange)
-      updateItemTotalPrice(variantId, upDatedItem.final_line_price)
-      updateTotalPrice(data.total_price)  
+      updateItemTotalPrice(itemTotalPrice, upDatedItem.final_line_price)
+      updateTotalPrice(data.total_price, totalPrice)  
     }
-}
-
-async function minusOne(variantId){
-  let item = cartData.items.find(obj => obj.variant_id == variantId)
-  let minusOne = item.quantity - 1
-  
-  await fetchCartChange(variantId, minusOne)
-
-  if(qtyChange == 0){
-    removeTableRow(variantId)
-    updateTotalPrice(data.total_price)  
-  }
-
-  let data = cartData
-
-  console.log('in minusOne function', data)
-  updateItemQuantity(variantId, minusOne)
-  updateItemTotalPrice(variantId, upDatedItem.final_line_price)
-  updateTotalPrice(data.total_price)
+    bottomBorder.classList = ''
+    bottomBorder.classList.add('borderOpen')  
 }
 
 async function removeFromCart(variantId){
+  let totalPrice = document.getElementById('cart-total-price')
+  let bottomBorder = document.getElementById('bottom-border')
+  bottomBorder.classList = ''
+  bottomBorder.classList.add('borderClose')
+  totalPrice.classList = ''
+  totalPrice.classList.add("shrinkNumber")
+
   await fetchCartChange(variantId, 0)
 
   let data = cartData
@@ -193,11 +88,17 @@ async function removeFromCart(variantId){
     location.reload() 
   } else {
     removeTableRow(variantId)
-    updateTotalPrice(data.total_price)  
+    updateTotalPrice(data.total_price, totalPrice)  
   }
+  bottomBorder.classList = ''
+  bottomBorder.classList.add('borderOpen')  
 }
 
 async function fetchCartChange(variantId, quantity){
+  let itemPriceSpinner = document.getElementById(`spinner-${variantId}`)
+  itemPriceSpinner.style.display = "block"
+
+
   let itemData = {
     "id": variantId,
     "quantity": quantity
@@ -217,6 +118,8 @@ async function fetchCartChange(variantId, quantity){
   )
   .then((state) => {
     cartData = JSON.parse(state);
+    itemPriceSpinner.style.display = "none"
+    //totalPriceSpinner.style.display = "none"
     //console.log('returned from cart change:', cartData)
   })
   .catch((error) => {
@@ -233,16 +136,16 @@ function updateItemQuantity(variantId, quantity){
   itemQuantityEl.innerHTML = quantity
 }
 
-function updateItemTotalPrice(id, price){
-  let itemTotalPrice = document.getElementById(`item-total-price-${id}`)
+function updateItemTotalPrice(itemTotalPrice, price){
   let formatedPrice = formatPrice(price)
   itemTotalPrice.innerHTML = formatedPrice
 }
 
-function updateTotalPrice(price){
-  let totalPrice = document.getElementById('cart-total-price')
+function updateTotalPrice(price, totalPriceEl){
   let formatedPrice = formatPrice(price)
-  totalPrice.innerHTML = formatedPrice
+  totalPriceEl.classList = ''
+  totalPriceEl.innerHTML = formatedPrice
+  totalPriceEl.classList.add('growNumber')
 }
 
 function formatPrice(price){

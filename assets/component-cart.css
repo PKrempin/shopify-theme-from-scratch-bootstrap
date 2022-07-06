@@ -1,0 +1,180 @@
+.item-input-wrapper{
+    display: flex;
+    justify-content: start;
+  }
+
+
+  .qty-wrapper{
+      border: 1px solid black;
+      display: flex;
+      justify-content: space-between;
+      font-size: 1.4em;
+  }
+
+
+  .qty-wrapper button {
+    background: none;
+	color: inherit;
+	border: none;
+	font: inherit;
+	outline: inherit;
+    padding: 0px 10px 0px 10px;
+  }
+
+  .qty-wrapper button:hover {
+    background: gray;
+    transition: 0.5s;
+  }
+
+  .qty-wrapper p {
+      margin: 0px 10px 0px 10px;
+  }
+
+  .item-input-wrapper a {
+    font-size:1.5rem;
+    text-decoration: none;
+    margin-left: 10px;
+    color: inherit;
+}
+
+.cart-total{
+    font-size: 1.5em;
+    font-weight: 100;
+}
+
+.cart-notes{
+    padding-right: 10px;
+    width: 60%;
+}
+
+.update-form-btn{
+    margin-bottom: 5px;
+}
+
+
+
+        /* Spinning-Loader */
+        
+        .loading-spinner {
+            display: none;
+            /*position: relative;*/
+            z-index: 999999;
+            width: 100%;
+          }
+          
+          .loading-spinner .spin-icon {
+            /*margin: auto;*/
+            width: 20px;
+            height: 20px;
+  
+            border: solid 3px transparent;
+            border-top-color:  #FF7F11;
+            border-left-color: #FF7F11;
+            border-radius: 80px;
+  
+            -webkit-animation: loading-spinner 500ms linear infinite;
+            -moz-animation:    loading-spinner 500ms linear infinite;
+            -ms-animation:     loading-spinner 500ms linear infinite;
+            -o-animation:      loading-spinner 500ms linear infinite;
+            animation:         loading-spinner 500ms linear infinite;
+          }
+  
+          @-webkit-keyframes loading-spinner {
+            0%   { -webkit-transform: rotate(0deg);   transform: rotate(0deg); }
+            100% { -webkit-transform: rotate(360deg); transform: rotate(360deg); }
+          }
+  
+          @-moz-keyframes loading-spinner {
+            0%   { -moz-transform: rotate(0deg);   transform: rotate(0deg); }
+            100% { -moz-transform: rotate(360deg); transform: rotate(360deg); }
+          }
+  
+          @-o-keyframes loading-spinner {
+            0%   { -o-transform: rotate(0deg);   transform: rotate(0deg); }
+            100% { -o-transform: rotate(360deg); transform: rotate(360deg); }
+          }
+  
+          @-ms-keyframes loading-spinner {
+            0%   { -ms-transform: rotate(0deg);   transform: rotate(0deg); }
+            100% { -ms-transform: rotate(360deg); transform: rotate(360deg); }
+          }
+  
+          @keyframes loading-spinner {
+            0%   { transform: rotate(0deg);   transform: rotate(0deg); }
+            100% { transform: rotate(360deg); transform: rotate(360deg); }
+          }
+  
+          /* Spinning-Loader */
+
+#cart-total-price{  
+  font-size: 1.5em;
+  font-weight: 100;
+}
+
+.shrinkNumber{
+  animation-name: shrinkNumber;
+  animation-duration: .2s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes shrinkNumber{
+  from{
+    transform: scale(1);
+    opacity: 100%;
+  }
+  to{
+    transform: scale(0);
+    opacity: 0%;
+  }
+}
+
+.growNumber{
+  animation-name: growNumber;
+  animation-duration: .5s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes growNumber{
+  from{
+    transform: scale(0);
+    opacity: 0%;
+  }
+  to{
+    transform: scale(1);
+    opacity: 100%;
+  }
+}
+
+
+#bottom-border{  
+  display: block; 
+  margin: 0 0 .5rem; 
+  width: 0%; 
+  border-bottom: 1px solid black; 
+}
+
+.borderOpen{
+  animation-name: borderOpen;
+  animation-duration: .5s;
+  animation-direction: normal;
+  animation-fill-mode: forwards;
+}
+
+@keyframes borderOpen{
+  0%{width: 0%}
+  100%{width: 100%}
+}
+
+.borderClose{
+  animation-name: borderClose;
+  animation-duration: .5s;
+  animation-direction: normal;
+  animation-fill-mode: forwards;
+}
+
+@keyframes borderClose{
+  0%{width: 100%}
+  100%{width: 0%}
+}
+
+    

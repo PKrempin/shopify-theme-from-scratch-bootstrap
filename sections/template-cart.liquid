@@ -16,9 +16,10 @@
       c. submit button named checkout
 
   Once all of the functionality is in place, push impliment auto unpdate functionality to 
-  the item quantities and the prices. Shopifys API?
+  the item quantities and the prices using Shopifys cart API. 
 -->
 
+{{ 'component-cart.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'custom-cart.js' | asset_url }}" defer="defer"></script>
 
 {% if cart.item_count == 0 %}
@@ -97,7 +98,7 @@
     
 
     {% else %}
-      
+    
     <form action="{{ routes.cart_url }}" method="POST" novalidate>
       <table class="table table-striped">
         <thead>
@@ -135,7 +136,11 @@
                 <a href="#" class="cart-remove-btn" onclick="removeFromCart('{{item.variant_id}}')"><i class="fa-solid fa-trash-can"></i></a>
               </div>
             </td>
-            <td id="item-total-price-{{item.variant_id}}">{{item.final_price | times: item.quantity | money}}</td>
+            <td><span id="item-total-price-{{item.variant_id}}">{{item.final_price | times: item.quantity | money}}</span>
+              <div class="loading-spinner" id="spinner-{{item.variant_id}}">
+                <div class="spin-icon"></div>
+              </div>
+            </td>
           </tr>
           {% endfor %}
         </tbody>
@@ -144,10 +149,13 @@
       <div class="d-flex justify-content-between">
         <div class="d-flex flex-column cart-notes">
           <label for="cart_notes my-1">Cart notes</label>
-          <textarea name="note" id="cart_note" placeholder="Optional*" class="w-full md:max-w-lg resize-none border h-20"></textarea>
+          <textarea name="note" id="cart_note" placeholder="optional*" class="w-full md:max-w-lg resize-none border h-20">{{cart.note}}</textarea>
         </div>  
         <div id="cart-footer" class="d-flex flex-column">
-          <div class="cart-total"> Cart Total: <span id="cart-total-price">{{ cart.total_price | money}}</span></div>
+          <div class="d-flex justify-content-between">
+          <div class="cart-total"> Cart Total:</div> <div id="cart-total-price">{{ cart.total_price | money}}</div>
+        </div>
+        <span id="bottom-border" class="borderOpen"></span>
           <button type="submit" class="btn btn-success" name="checkout">Checkout</button>
         </div>
       </div>

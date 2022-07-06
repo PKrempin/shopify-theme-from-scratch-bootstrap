@@ -1,0 +1,36 @@
+{{ 'component-product-card.css' | asset_url | stylesheet_tag }}
+
+{% capture number_of_products %}{{ section.settings.products_rendered }}{% endcapture %}
+
+
+{% paginate collection.products by number_of_products %}
+  <div id="product_card_grid" class="mt-2">
+
+  {% for product in collection.products %}
+  {% render "product-card", product_product: product %}
+  {% endfor %}
+
+  </div>
+  {% if paginate.pages > 1 %}
+    {{ paginate | default_pagination }}
+  {% endif %}
+{% endpaginate %}
+
+<script src="{{ 'template-collection-add-to-cart.js' | asset_url}}" defer="defer"></script>
+
+{% schema %}
+{
+  "name": "Template Collection",
+  "settings": [
+  {
+    "type": "range",
+    "id": "products_rendered",
+    "min": 8,
+    "max": 24,
+    "step": 1,
+    "label": "Number of products per page",
+    "default": 12
+  }
+  ]
+}
+{% endschema %}
